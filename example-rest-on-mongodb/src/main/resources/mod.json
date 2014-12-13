@@ -1,0 +1,14 @@
+{
+
+  "main":"com.github.relai.vertx.springdata.example.rest.ContactRestApp",
+  "includes": "com.github.relai.vertx.springdata~mod-spring-data~0.5",
+
+  "description":"A sample rest application of mod-spring-data using MongoDB as the data store",
+  "licenses": ["The Apache Software License Version 2.0"],
+  "author": "Re Lai",
+
+  "keywords": ["JPA", "Spring Data", "Boot", "MongoDB"],
+  "homepage": "http://relai.blogspot.com/",
+
+  "auto-redeploy": true
+}

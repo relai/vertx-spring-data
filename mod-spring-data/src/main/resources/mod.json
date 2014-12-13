@@ -1,0 +1,11 @@
+{
+  "description":"Query data using Spring Data",
+  "licenses": ["The Apache Software License Version 2.0"],
+  "author": "Re Lai",
+
+  "developers": [],
+  "keywords": ["JPA", "Spring Data", "Spring Boot"],
+  "homepage": "http://relai.blogspot.com",
+
+  "auto-redeploy": true
+}

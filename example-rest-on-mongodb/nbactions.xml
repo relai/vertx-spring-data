@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>vertx:runMod</goal>
+            </goals>
+            <properties>
+                <jpda.listen>maven</jpda.listen>
+                <skipTests>true</skipTests>
+                
+                
+            </properties>
+        </action>
+        <action>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>vertx:runMod</goal>
+            </goals>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-Download Sources</actionName>
+            <displayName>Download Sources</displayName>
+            <goals>
+                <goal>dependency:sources</goal>
+            </goals>
+        </action>
+    </actions>
