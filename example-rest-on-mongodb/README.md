@@ -1,6 +1,6 @@
 # Contact Management REST Web Service
 
-This is a sample REST web service application for Vertx Spring Data.
+This is a sample REST web service application for Vertx Spring Data on MongoDB.
 
 ## Overview
 
@@ -10,29 +10,29 @@ While Spring Data is often used with JPA, Spring Data itself provides a fairly
 back-end-agnostic approach to data access. In this sample, MongoDB is used 
 as the data store almost transparently.
 
-To run the application, make sure MongoDB is locally running first.
 
 ### Auditing 
 
 
-Spring Data MongoDB provides auditing features. In this sample, we use
+Spring Data MongoDB provides handy auditing features. In this sample, we use
 * CreateDate
 * LastModifiedDate
 
 
 ### Joda Time
 
-Joda Time is fully support.  As a example, the lastModified is a Joda time.
+Joda Time is fully support.  As a example, `lastModified` field is a Joda time.
 
 
 ## Step by Step
 
 ### Step 0: dependencies
 
-Add dependency to `mod-spring-data` in mod.json:
-  "includes": "com.github.relai.vertx.springdata~mod-spring-data~1.0-SNAPSHOT",
+Add dependency to `mod-spring-data` in [mod.json](https://github.com/relai/vertx-spring-data/blob/master/example-rest-on-mongodb/src/main/resources/mod.json):
 
-In pom, mark the dependency as provided:
+  "includes": "com.github.relai.vertx.springdata~mod-spring-data~0.5"
+
+In [`pom`](https://github.com/relai/vertx-spring-data/blob/master/example-rest-on-mongodb/pom.xml), mark the dependency as provided:
 
     <dependency>
        <groupId>com.github.relai.vertx.springdata</groupId>
@@ -66,12 +66,12 @@ The dependencies are:
 * ContactRepository: the repository class
 * Config: Spring Boot application context
 
-### Step 2: create asynchronous repository interface - optional
+### Step 2: create asynchronous repository interface
 
-Not needed. The stock AsyncCrudRepository is used.
+Not needed. The stock [AsyncCrudRepository](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/main/java/com/github/relai/vertx/springdata/AsyncCrudRepository.java) is used.
 
 
-### Step 3: instantiate asynchronous repository:
+### Step 3: [instantiate](https://github.com/relai/vertx-spring-data/blob/master/example-rest-on-mongodb/src/main/java/com/github/relai/vertx/springdata/example/rest/ContactRestApp.java) asynchronous repository:
 
         AsyncRepositoryBuilder<String> builder
             = new AsyncRepositoryBuilder<>(vertx.eventBus());            
@@ -79,14 +79,14 @@ Not needed. The stock AsyncCrudRepository is used.
             builder.build(AsyncPagingAndSortingRepository.class);
         RestHelper<String> helper = new RestHelper<>(repository, String.class);		
 
-### Step 4: use the asynchronous repository
+### Step 4: [use](https://github.com/relai/vertx-spring-data/blob/master/example-rest-on-mongodb/src/main/java/com/github/relai/vertx/springdata/example/rest/ContactRestApp.java) the asynchronous repository
 
         RestHelper<String> helper = new RestHelper<>(repository, String.class);                        
         getVertx().createHttpServer()
 	    	.requestHandler(helper.createRouteMatcher("/contacts"))
 	    	.listen(8080, "localhost");
 
-### Step 5: deploy the worker verticle
+### Step 5: [deploy](https://github.com/relai/vertx-spring-data/blob/master/example-rest-on-mongodb/src/main/java/com/github/relai/vertx/springdata/example/rest/ContactRestApp.java) the worker verticle
 
         SpringDeployer deployer = new SpringDeployer(container);
         deployer.springConfigClass(Config.class)
@@ -104,7 +104,27 @@ The REST service end-point can be accessed at localhost:8080/contacts
 
 ### Create contacts
 
+POST /contacts
+
+{"firstName":"June",
+"lastName":"Lee"}
+
+Response:
+
+{"firstName":"June",
+"lastName":"Lee",
+"created":"2014-12-13T05:16:28.199+0000",
+"id":"548bcbac7bcb8d95dad48cfd",
+"lastModified":"2014-12-13T05:16:28.199Z",
+"version":0}
+
 ### Update contacts
 
-### Read contacts
+PUT /contacts/548bcbac7bcb8d95dad48cfd
+
+{"firstName":"June B","lastName":"Lee", "id":"548bcbac7bcb8d95dad48cfd", "version":0}
+
+Response:
+
+{"firstName":"June B","lastName":"Lee","id":"548bcbac7bcb8d95dad48cfd","lastModified":"2014-12-13T05:18:09.862Z","version":1}
 

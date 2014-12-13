@@ -135,8 +135,8 @@ public class RestHelper<ID extends Serializable> {
         }
     }
 
-      protected void getAllWithSort(HttpServerRequest request, Sort sort){
-         MessageHandler<JsonArray> onreply = result -> 
+    protected void getAllWithSort(HttpServerRequest request, Sort sort){
+        MessageHandler<JsonArray> onreply = result -> 
              onDatabaseResult(result, request);
          
         if (client instanceof AsyncPagingAndSortingRepository) {
@@ -156,7 +156,7 @@ public class RestHelper<ID extends Serializable> {
      * @param request HTTP request
      */  
 	public void post(HttpServerRequest request) {
-		save(request, true);
+        save(request, true);
 	}
 
     /**
