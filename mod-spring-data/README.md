@@ -28,43 +28,40 @@ This project further makes it easy to expose the entities in a RESTful web servi
 through RestHelper and YokeRestHelper.
 
 
-## Sample Applications
 
-* Shopping List REST web service using Spring Data JPA (HSQLDB and Hibernate JPA)
-* Contact REST web service using Spring Data MongoDB (MongoDB)
-* Todo list web application using Spring Data JPA (HSQLDB and Hibernate JPA)
+## Sample: [Shopping List](https://github.com/relai/vertx-spring-data/tree/master/mod-spring-data/src/test)
 
-## Sample: Shopping List Rest Web Service
+This step-by-step guide shows you how to use mod-spring-data.
 
-### Step 1: create Spring Data domain classes
+### Step 1: create Spring Data [domain classes](https://github.com/relai/vertx-spring-data/tree/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/domain)
 
 You need to create
-* ShoppingItem: the entity class
-* ShoppingItemRepository: the Spring Data Repository class
-* Config: the Spring Boot ApplicationContext config class
+* [ShoppingItem](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/domain/ShoppingItem.java): the entity class
+* [ShoppingItemRepository](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/domain/ShoppingItemRepository.java): the Spring Data Repository class
+* [Config](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/domain/Config.java): the Spring Boot ApplicationContext config class
 
-### Step 2: create asynchronous repository interface - optional
+### Step 2: create asynchronous repository interface
 
-The asynchronous repository is the companion interface to the synchronous ShoppingItemRepository
+To invoke Spring Data, we use asynchronous repository. The mod comes with two stock asynchronous repository:
 
-* AsyncShoppingItemRepository 
+* [AsyncCrudRepository](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/main/java/com/github/relai/vertx/springdata/AsyncCrudRepository.java) 
+* [AsyncPagingAndSortingRepository](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/main/java/com/github/relai/vertx/springdata/AsyncPagingAndSortingRepository.java)
 
-Note that in many cases you can use the stock AsyncCrudRepository or AsyncPagingAndSortingRepository. 
-You need to create your own asynchronous repository only if you want to use a custom method.
+In many cases you can just use one of the above interfaces directly. However, if 
+you add custom methods to the Repository interface, you need to define your custom asynchronous repository. 
+
+Since we add custom methods to our repository interface, we define the asynchronous repository accordingly:
+
+* [AsyncShoppingItemRepository](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/AsyncShoppingItemRepository.java) 
 
 
-### Step 3: instantiate asynchronous repository:
+### Step 3: [instantiate](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/ShoppingListTest.java) asynchronous repository:
 
     AsyncRepositoryBuilder<String> builder = new AsyncRepositoryBuilder<>(vertx.eventBus());    
 	AsyncShoppingItemRepository	client = builder.build(AsyncShoppingItemRepository.class);			
+  
 
-### Step 4: deploy the worker verticle
-
-    SpringDeployer deployer = new SpringDeployer(container);
-    deployer.springConfigClass(Config.class)
-            .deploy(result -> startTests());  
-
-### Step 5: use the asynchronous repository
+### Step 4: [use](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/ShoppingListTest.java) the asynchronous repository
 
 You can now consume the asynchronous repository in your application. If you want
 to expose the resource as a REST web service, a convenience helper class is provided.
@@ -74,3 +71,9 @@ to expose the resource as a REST web service, a convenience helper class is prov
     yoke.use(new BodyParser())
         .use(rest.createRouter("/shoppinglist"))
         .listen(PORT_NUMBER);
+
+### Step 5: [deploy](https://github.com/relai/vertx-spring-data/blob/master/mod-spring-data/src/test/java/com/github/relai/vertx/springdata/integration/shoppingList/ShoppingListTest.java) the worker verticle
+
+    SpringDeployer deployer = new SpringDeployer(container);
+    deployer.springConfigClass(Config.class)
+            .deploy(result -> startTests());
