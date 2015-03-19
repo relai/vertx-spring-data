@@ -18,4 +18,12 @@
                 <goal>dependency:sources</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-Attach source and Javadoc jars</actionName>
+            <displayName>Attach source and Javadoc jars</displayName>
+            <goals>
+                <goal>source:jar</goal>
+                <goal>javadoc:jar</goal>
+            </goals>
+        </action>
     </actions>
